@@ -9,13 +9,16 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.util.glu.GLU;
 
 import net.op.SharedConstants;
+import net.op.entity.Player;
 import net.op.render.Camera;
 import net.op.render.Render;
+import net.op.render.TerrainRenderer;
+import net.op.util.Blocks;
 import net.op.util.MouseUtils;
-import net.op.util.Timer;
+import net.op.world.terrain.PlainTerrainGenerator;
+import net.op.world.terrain.Terrain;
 
 public class OpenCraft implements Runnable {
 
@@ -23,33 +26,32 @@ public class OpenCraft implements Runnable {
 
 	public Thread thread;
 
-	public Timer timer;
 	public Render render;
 	public Camera camera;
+	public Player player;
+	public Terrain terrain;
 
 	public OpenCraft() {
 		this.camera = new Camera();
 		this.render = new Render(camera);
-		this.timer = new Timer();
 
 		this.thread = new Thread(this);
 		this.thread.setName("main");
+		
+		var terrainGen = new PlainTerrainGenerator(10, 5, 10);
+		this.terrain = terrainGen.generate();
 	}
 
 	@Override
 	public void run() {
 		safeInit();
 
-		this.timer.onTick(() -> {
+		while (!Display.isCloseRequested()) {
 			update();
 			render();
 
 			Display.update();
 			Display.sync(60);
-		});
-
-		while (!Display.isCloseRequested()) {
-			this.timer.tick();
 		}
 
 		this.stop();
@@ -58,9 +60,9 @@ public class OpenCraft implements Runnable {
 	private void init() throws LWJGLException {
 		/* Create display */
 		Display.setDisplayMode(new DisplayMode(854, 480)); // Set size
-		Display.setTitle(SharedConstants.DISPLAY_NAME); // Set display title
-		Display.create(); // Create it
-		Display.setResizable(false); // Make not resizable
+		Display.setTitle(SharedConstants.DISPLAY_NAME);    // Set display title
+		Display.create();                                  // Create it
+		Display.setResizable(false);                       // Make not resizable
 
 		/* Init input */
 		Mouse.create();
@@ -97,7 +99,9 @@ public class OpenCraft implements Runnable {
 		Keyboard.poll();
 
 		while (!Mouse.isGrabbed() && Mouse.next()) {
-			if (!Mouse.getEventButtonState() | Mouse.getEventButton() != 0 | !MouseUtils.inScreen())
+			if (!Mouse.getEventButtonState()
+					| Mouse.getEventButton() != 0
+					| !MouseUtils.inScreen())
 				continue;
 
 			Mouse.setGrabbed(true);
@@ -117,11 +121,11 @@ public class OpenCraft implements Runnable {
 			}
 		}
 
-		if (!Keyboard.next())
-			return;
-
 		if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
 			Mouse.setGrabbed(false);
+		
+		if (!Mouse.isGrabbed())
+			return;
 
 		// W
 		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
@@ -166,9 +170,13 @@ public class OpenCraft implements Runnable {
 		glRotatef(camera.pitch, 1.0f, 0.0f, 0.0f);
 		glRotatef(camera.yaw, 0.0f, 1.0f, 0.0f);
 
+		//System.out.println(-camera.x + " " + -camera.y + " " + -camera.z);
 		// Apply camera translations
 		glTranslatef(-camera.x, -camera.y, -camera.z);
 
+		TerrainRenderer trender = new TerrainRenderer();
+		trender.renderTerrain(terrain);
+		
 		render.drawCrosshair();
 	}
 

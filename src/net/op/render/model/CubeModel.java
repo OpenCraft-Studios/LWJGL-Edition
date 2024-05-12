@@ -4,7 +4,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class CubeModel implements Model {
 
-	private static final float BLOCK_SIZE = 0.8f;
+	private static final float BLOCK_SIZE = 1.0f;
 	private static final float MIN = -0.5f * BLOCK_SIZE;
 	private static final float MAX = 0.5f * BLOCK_SIZE;
 	

@@ -26,13 +26,11 @@ public class MouseUtils {
 	}
 	
 	public static boolean inScreen() {
-		int screenX, screenY, screenWidth, screenHeight;
-		screenX = Display.getX();
-		screenY = Display.getY();
+		int screenWidth, screenHeight;
 		screenWidth = Display.getWidth();
 		screenHeight = Display.getHeight();
 		
-		Rectangle screen = new Rectangle(screenX, screenY, screenWidth, screenHeight);
+		Rectangle screen = new Rectangle(0, 0, screenWidth, screenHeight);
 		return inRange(screen);
 	}
 

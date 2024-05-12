@@ -1,5 +1,7 @@
 package net.op.world.terrain;
 
+import org.joml.Vector3i;
+
 import net.op.util.Blocks;
 
 public class PlainTerrainGenerator extends TerrainGenerator {
@@ -11,11 +13,7 @@ public class PlainTerrainGenerator extends TerrainGenerator {
 	@Override
 	public Terrain generate() {
 		var terrain = new Terrain(terrainWidth, terrainHeight, terrainDepth);
-		for (int x = 0; x < terrainWidth; x++) {
-			for (int z = 0; z < terrainDepth; z++) {
-				terrain.setBlock(Blocks.TEST, x, 0, z);
-			}
-		}
+		terrain.setBlock(Blocks.TEST, new Vector3i(0, 0, 0));
 		
 		return terrain;
 	}
