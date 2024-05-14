@@ -152,12 +152,12 @@ public class CubeModel implements Model {
 	public static final CubeModel UNCOLORED = new CubeModel(true, false);
 	public static final CubeModel INVISIBLE = new CubeModel(false, false);
 	
-	private final boolean coloring;
+	private final boolean color;
 	private final boolean visible;
 	
-	private CubeModel(final boolean visible, final boolean coloring) {
+	CubeModel(final boolean visible, final boolean coloring) {
 		this.visible = visible;
-		this.coloring = coloring;
+		this.color = coloring;
 	}
 	
 	public void render() {
@@ -171,7 +171,7 @@ public class CubeModel implements Model {
 			int vertexIndex = index;
 			int normalIndex = i / 6 * 3; // i / 2
 
-			if (coloring) {
+			if (color) {
 				int colorIndex = normalIndex;
 				glColor3f(COLORS[colorIndex], COLORS[colorIndex + 1], COLORS[colorIndex + 2]);
 			}
@@ -180,6 +180,14 @@ public class CubeModel implements Model {
 			glVertex3f(VERTICES[vertexIndex], VERTICES[vertexIndex + 1], VERTICES[vertexIndex + 2]);
 		}
 		glEnd();
+	}
+	
+	public boolean hasColor() {
+		return color;
+	}
+	
+	public boolean isVisible() {
+		return visible;
 	}
 
 }
