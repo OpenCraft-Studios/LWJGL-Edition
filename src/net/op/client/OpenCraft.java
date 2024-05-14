@@ -4,8 +4,17 @@ import static java.lang.Math.*;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import javax.imageio.ImageIO;
+
+import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -24,7 +33,7 @@ public class OpenCraft implements Runnable {
 
 	public static final float SENSIVILITY = 0.1f;
 	public static final float MOVEMENT_SPEED = 0.1f;
-	
+
 	public static OpenCraft oc = null;
 
 	public Thread thread;
@@ -33,24 +42,24 @@ public class OpenCraft implements Runnable {
 	public World world;
 	public Render render;
 	public Player player;
-	
+
 	public OpenCraft() {
 		this.random = new Random();
-		
+
 		this.player = new Player();
 		this.render = new Render();
 
 		this.thread = new Thread(this);
 		this.thread.setName("main");
-		
+
 		/* Generate terrain */
-		
+
 		var terrainGen = new PlainTerrainGenerator();
 		terrainGen.clip(10, 5, 10);
-		
+
 		this.world = new World(10, 5, 10);
 		this.world.generate(terrainGen);
-		
+
 	}
 
 	@Override
@@ -70,10 +79,11 @@ public class OpenCraft implements Runnable {
 
 	private void init() throws LWJGLException {
 		/* Create display */
-		Display.setDisplayMode(new DisplayMode(854, 480)); // Set size
+		Display.setDisplayMode(new DisplayMode(854, 480)); // Set display size
 		Display.setTitle(SharedConstants.DISPLAY_NAME);    // Set display title
+		setDisplayIcons();                                 // Display icons
 		Display.create();                                  // Create it
-		Display.setResizable(true);                        // Make resizable
+		Display.setResizable(false);                       // Make no it resizable
 
 		/* Init input */
 		Mouse.create();
@@ -93,12 +103,12 @@ public class OpenCraft implements Runnable {
 		glEnable(GL_LIGHTING);
 		glEnable(GL_LIGHT0);
 		glEnable(GL_NORMALIZE);
-		
-		glShadeModel(GL_FLAT); // Cambiar a flat shading
-	    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // Perspectiva más correcta
-		
+
+		glShadeModel(GL_FLAT); // Change to flat shading
+		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // Nicely perspective
+
 		render.setupSky();
-		glClearDepth(1.0f); // Valor de profundidad del buffer de profundidad
+		glClearDepth(1.0f); // Set value of the buffer depth
 
 		/* Enable face culling */
 		glEnable(GL_CULL_FACE);
@@ -108,7 +118,7 @@ public class OpenCraft implements Runnable {
 	private void update() {
 		Mouse.poll();
 		Keyboard.poll();
-		
+
 		player.tick(world);
 
 		while (!Mouse.isGrabbed() && Mouse.next()) {
@@ -136,7 +146,7 @@ public class OpenCraft implements Runnable {
 
 		if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
 			Mouse.setGrabbed(false);
-		
+
 		if (!Mouse.isGrabbed())
 			return;
 
@@ -173,16 +183,12 @@ public class OpenCraft implements Runnable {
 	private void render() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glLoadIdentity();
-		
+
 		render.moveCameraTo(player);
 
 		var terrainRenderer = new TerrainRenderer();
-		terrainRenderer.clip(
-				world.getWidth(),
-				world.getHeight(),
-				world.getDepth()
-			);
-		
+		terrainRenderer.clip(world.getWidth(), world.getHeight(), world.getDepth());
+
 		terrainRenderer.render(world);
 		render.drawCrosshair();
 	}
@@ -210,6 +216,49 @@ public class OpenCraft implements Runnable {
 			e.printStackTrace();
 			System.exit(1);
 		}
+	}
+
+	private ByteBuffer getIcon(String resource) {
+		ByteBuffer bb = null;
+		
+		try {
+			InputStream inputStream = getClass().getResourceAsStream(resource);
+			BufferedImage image = ImageIO.read(inputStream);
+
+			int width = image.getWidth();
+			int height = image.getHeight();
+
+			int[] pixels = new int[width * height];
+			image.getRGB(0, 0, width, height, pixels, 0, width);
+
+			bb = BufferUtils.createByteBuffer(width * height * 4);
+
+			for (int y = 0; y < height; y++) {
+				for (int x = 0; x < width; x++) {
+					int pixel = pixels[y * width + x];
+					bb.put((byte) ((pixel >> 16) & 0xFF));
+					bb.put((byte) ((pixel >> 8) & 0xFF));
+					bb.put((byte) (pixel & 0xFF));
+					bb.put((byte) ((pixel >> 24) & 0xFF));
+				}
+			}
+
+			bb.flip();
+			inputStream.close();
+		} catch (Exception ignored) {
+		}
+		
+		return bb;
+	}
+
+	private void setDisplayIcons() {
+		Stream<String> resources = Stream.of("/icons/icon_16x16.png", "/icons/icon_24x24.png", "/icons/icon_32x32.png",
+				"/icons/icon_48x48.png", "/icons/icon_256x256.png");
+
+		List<ByteBuffer> bbfs = resources.map(res -> getIcon(res)).filter(icon -> icon != null)
+				.collect(Collectors.toList());
+
+		Display.setIcon(bbfs.toArray(new ByteBuffer[0]));
 	}
 
 	public static void main(String[] args) {
