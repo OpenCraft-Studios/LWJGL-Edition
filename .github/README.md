@@ -116,4 +116,4 @@ java -cp OpenCraft.jar:libraries.jar: net.opencraft.OpenCraft --gameDir opcraft/
 [issues-shield]: https://img.shields.io/github/issues/OpenCraft-Studios/LWJGL-Edition.svg?style=for-the-badge
 [issues-url]: https://github.com/OpenCraft-Studios/LWJGL-Edition/issues
 [license-shield]: https://img.shields.io/github/license/OpenCraft-Studios/LWJGL-Edition.svg?style=for-the-badge
-[license-url]: https://github.com/OpenCraft-Studios/LWJGL-Edition/blob/main/LICENSE.txt
+[license-url]: https://github.com/OpenCraft-Studios/LWJGL-Edition/blob/main/.github/LICENSE.txt
