@@ -8,7 +8,7 @@
 
 </div>
 
-<br />
+<br /><br />
 <div align="center">
   <a href="https://github.com/OpenCraft-Studios/LWJGL-Edition">
     <img src="https://github.com/OpenCraft-Studios/Java-Edition/blob/dev/.github/assets/images/icon.png?raw=true" alt="" height="128" width="128" />
