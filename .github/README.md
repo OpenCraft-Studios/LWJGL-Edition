@@ -66,6 +66,8 @@ I hope that you can be part of that community forking the repository or simply, 
   </div>
 </details>
 
+---
+
 ## ☕ Downloading
 For now, we don't have prebuild jars. You need to compile it manually.
 Although you will need a launcher to play the game because it needs of libraries.
