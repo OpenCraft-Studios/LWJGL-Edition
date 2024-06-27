@@ -15,13 +15,11 @@
   <p align="center">
     A roughly calculated clone of Minecraft
     <br /><br />
-    <a href="https://github.com/OpenCraft-Studios/LWJGL-Edition/wiki"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/OpenCraft-Studios/LWJGL-Edition/wiki"><b>Explore the docs »</b></a>
     <br />
-    <b>
-      <a href="https://github.com/OpenCraft-Studios/LWJGL-Edition/issues">REPORT BUGS</a>
-      •
-      <a href="https://github.com/OpenCraft-Studios/LWJGL-Edition/pulls">FEATURE REQUEST</a>
-    </b>
+    <a href="https://github.com/OpenCraft-Studios/LWJGL-Edition/issues">Report Bugs</a>
+    ·
+    <a href="https://github.com/OpenCraft-Studios/LWJGL-Edition/pulls">Feature Request</a>
   </p>
 </div>
 
@@ -39,7 +37,7 @@
   
 ### Quick Links
   
-<a href="☕-downloading">
+<a href="#-downloading">
   <img src='https://img.shields.io/badge/DOWNLOAD-green?style=for-the-badge'>
 </a>
   
@@ -69,7 +67,7 @@ For now, we don't have prebuild jars. You need to compile it manually.
 Although you will need a launcher to play the game because it needs of libraries.
 
 > [!NOTE]
-> *Every required libraries are open-source and free, so you can download them easily.*
+> Every required libraries are open-source and free, so you can download them easily.
 
 If you don't want to use a launcher, you can execute it manually. Only **follow these steps**:
 
@@ -97,8 +95,6 @@ java -cp OpenCraft.jar:libraries.jar: net.opencraft.OpenCraft --gameDir opcraft/
 
 ## ♥️ Contributing
 > This section makes reference to the file [```CONTRIBUTING.md```](CONTRIBUTING.md)
-
----
 
 ## 👷‍♂️ Developers
 | [![CiroZDP](https://avatars.githubusercontent.com/u/161502824?v=4)](https://github.com/CiroZDP) | [![milk man](https://avatars.githubusercontent.com/u/74984053?v=4)](https://github.com/TheNicolasDeveloper) | ![Community](https://cdni.iconscout.com/illustration/free/thumb/free-community-2103591-1768087.png)	|
