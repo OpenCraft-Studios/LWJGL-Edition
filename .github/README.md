@@ -53,11 +53,11 @@ I hope that you can be part of that community forking the repository or simply, 
 <details open>
   <summary>Screenshots</summary><br />
   <p align="center">
-    <img width="49%" src=".github/images/screenshot1.gif" alt="GIF"/>&nbsp;
-    <img width="49%" src=".github/images/screenshot2.png" alt="PNG"/>
+    <img width="49%" src="images/screenshot1.gif" alt="GIF"/>&nbsp;
+    <img width="49%" src="images/screenshot2.png" alt="PNG"/>
   </p>
   <div align="center">
-    <img width="80%" src=".github/images/screenshot3.png" alt="PNG"/>
+    <img width="80%" src="images/screenshot3.png" alt="PNG"/>
     <p><b>+6 languages</b></p>
   </div>
 </details>
