@@ -8,8 +8,19 @@ import java.text.AttributedCharacterIterator;
 
 import org.lwjgl.opengl.Display;
 
+/**
+ * <h1>GLContext</h1> This class is used to implement Java Graphics to OpenGL.
+ * OpenGL can be messy sometimes, so we decided to implement this class to code
+ * much faster.
+ * 
+ * @author Ciro
+ * @since 1.0.0
+ */
 public class GLContext extends Graphics {
 
+	/**
+	 * The global instance of this class.
+	 */
 	public static final GLContext instance = new GLContext();
 
 	public static Graphics getGraphics() {
@@ -71,12 +82,12 @@ public class GLContext extends Graphics {
 	@Override
 	public void setClip(int x, int y, int width, int height) {
 		glViewport(x, y, width, height);
-		
+
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		
+
 		glOrtho(x, width, height, y, -1, 1);
-		
+
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 	}
@@ -236,7 +247,7 @@ public class GLContext extends Graphics {
 	@Override
 	public void dispose() {
 	}
-	
+
 	public void render() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
