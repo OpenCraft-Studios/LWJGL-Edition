@@ -157,10 +157,15 @@ public class Utils {
 		do {
 			String strDirectory;
 			strDirectory = (String) JOptionPane.showInputDialog(null, "Insert the directory of the game:", "opcraft");
-			directory = parseDirectory(strDirectory);
 			
+			// If the user has pressed the cancel button, exit JVM
+			if (strDirectory == null)
+				System.exit(0);
+			
+			directory = parseDirectory(strDirectory);
 			if (invalidDir = directory == null)
 				JOptionPane.showMessageDialog(null, "Invalid directory! Try again.", "", JOptionPane.ERROR_MESSAGE);
+			
 		} while (invalidDir);
 		
 		return directory;
