@@ -60,7 +60,9 @@ I want to create a community around this project,
 I hope that you can be part of that community forking the repository or simply, bring us a star :heart:
 
 <details open>
-  <summary>Screenshots</summary><br />
+  <summary>
+    <h3>Screenshots</h3>
+  </summary><br />
   <p align="center">
     <img width="49%" src="images/screenshot1.gif" alt="GIF"/>&nbsp;
     <img width="49%" src="images/screenshot2.png" alt="PNG"/>
