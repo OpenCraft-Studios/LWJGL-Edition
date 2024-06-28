@@ -66,6 +66,10 @@ public final class OpenCraft implements Runnable {
 
 	private void tick() {
 		this.running = running && !Display.isCloseRequested();
+		if (Display.isResizable()) {
+			this.width = Display.getWidth();
+			this.height = Display.getHeight();
+		}
 
 		Display.update();
 		Display.sync(60);
@@ -76,9 +80,9 @@ public final class OpenCraft implements Runnable {
 		this.running = true;
 
 		GLContext gl = GLContext.instance;
-		gl.setClip(0, 0, width, height);
 		while (running) {
 			gl.render();
+			gl.setClip(0, 0, width, height);
 
 			gl.setColor(Color.WHITE);
 			gl.drawLine(0, 0, 854, 480);
@@ -151,7 +155,6 @@ public final class OpenCraft implements Runnable {
 				// If that didn't work, try the new way
 				thread.interrupt();
 			} catch (Exception e2) {
-				
 				// If somehow it didn't work, throw an exception
 				e1.printStackTrace();
 				e2.printStackTrace();
