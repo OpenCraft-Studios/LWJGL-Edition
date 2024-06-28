@@ -23,10 +23,6 @@ public class GLContext extends Graphics {
 	 */
 	public static final GLContext instance = new GLContext();
 
-	public static Graphics getGraphics() {
-		return GLContext.instance;
-	}
-
 	@Override
 	public Graphics create() {
 		return this;
