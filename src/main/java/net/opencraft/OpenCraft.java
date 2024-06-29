@@ -173,16 +173,29 @@ public final class OpenCraft implements Runnable {
 			// Try to initialize OpenGL stuff
 			this.initGL();
 		} catch (LWJGLException e) {
-			e.printStackTrace();
+			/*
+			 * This exception is thrown when a OpenGL component
+			 * fails to initialize.
+			 */
+			e.printStackTrace(); // Show stack trace on console
 			showMessageDialog(null, e, "Failed to start OpenCraft!", ERROR_MESSAGE);
 
 			if (e.getMessage().contains(INIT_ERROR_MESSAGE.substring(3)))
 				System.exit(INIT_ERROR_CODE);
 
 			System.exit(GENERIC_ERROR_CODE);
+			
 		} catch (UnsatisfiedLinkError ule) {
+			/*
+			 * This error occurs when OpenCraft has got no linked natives (DLL files).
+			 */
+			
+			// Show a error message
 			showMessageDialog(null, "OpenCraft requires OpenGL natives!", "Failed to start OpenCraft!", ERROR_MESSAGE);
+			
+			// Exit the JVM with the error code specified
 			System.exit(NO_NATIVES_LINKED_CODE);
+			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			showMessageDialog(null, ex, "Failed to start OpenCraft!", ERROR_MESSAGE);

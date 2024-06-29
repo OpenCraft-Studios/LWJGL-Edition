@@ -189,8 +189,7 @@ public class GLContext extends Graphics {
 
 	@Override
 	public void fillPolygon(int[] xPoints, int[] yPoints, int nPoints) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override

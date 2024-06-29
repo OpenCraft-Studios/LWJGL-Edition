@@ -13,6 +13,8 @@ import javax.swing.UIManager;
 
 import org.lwjgl.opengl.Display;
 
+import net.opencraft.annotation.Required;
+
 public class Utils {
 
 	public static final String LWJGL_ZIP = "https://kumisystems.dl.sourceforge.net/project/java-game-lib/Official%20Releases/LWJGL%202.9.3/lwjgl-2.9.3.zip?viasf=1";
@@ -25,6 +27,10 @@ public class Utils {
 		private GUI() {
 		}
 
+		/**
+		 * Sets the style of the dialog boxes to system's default.
+		 * @return true if the look and feel was established successfully, otherwise false
+		 */
 		public static boolean setOSLookAndFeel() {
 			try {
 				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -43,9 +49,15 @@ public class Utils {
 		private Natives() {
 		}
 
+		/**
+		 * Downloads the natives into the selected directory.
+		 * @return true if everything goes successful, otherwise false
+		 */
 		public static boolean downloadNatives(File nativesDir) {
 			try {
+				// Execute part 1
 				downloadNatives0(nativesDir);
+				// Execute part 2
 				downloadNatives1(nativesDir);
 			} catch (Exception ignored) {
 				return false;
@@ -55,26 +67,37 @@ public class Utils {
 		}
 
 		private static void downloadNatives0(File nativesDir) throws Exception {
+			// If the specified item is a file, delete it
 			if (nativesDir.isFile())
 				nativesDir.delete();
 
+			// If the specified item doesn't exists, create it
 			if (!nativesDir.exists())
 				nativesDir.mkdirs();
 
-			File target = new File(nativesDir, "lwjgl.zip");
+			/* Create the LWJGL.zip file */
+			
+			// The file
+			File lwjglFile = new File(nativesDir, "lwjgl.zip");
 
-			if (target.isDirectory())
-				target.delete();
-
+			// If a directory takes the name "lwjgl.zip", delete it
+			if (lwjglFile.isDirectory())
+				lwjglFile.delete();
+			
+			// Create the URI of the file
 			URI uri = URI.create(LWJGL_ZIP);
+			
+			// Download the file
 			try (InputStream in = uri.toURL().openStream()) {
-				Files.copy(in, target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+				Files.copy(in, lwjglFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			}
 		}
 
-		private static void downloadNatives1(File nativesDir) throws Exception {
+		private static void downloadNatives1(@Required File nativesDir) throws Exception {
+			@Required
 			File lwjglFile = new File(nativesDir, "lwjgl.zip");
 
+			// If the 'lwjgl.zip' file doesn't exists, throw an exception
 			if (!lwjglFile.exists())
 				throw new Exception();
 
@@ -84,10 +107,7 @@ public class Utils {
 			if (!nativesDir.exists())
 				nativesDir.mkdirs();
 
-			final boolean windows;
-			final boolean linux;
-			final boolean macOS;
-
+			final boolean windows, linux, macOS;
 			{
 				final String strOS = System.getProperty("os.name").toLowerCase();
 				windows = strOS.contains("windows");
@@ -162,6 +182,7 @@ public class Utils {
 			if (strDirectory == null)
 				System.exit(0);
 			
+			// Try to parse directory
 			directory = parseDirectory(strDirectory);
 			if (invalidDir = directory == null)
 				JOptionPane.showMessageDialog(null, "Invalid directory! Try again.", "", JOptionPane.ERROR_MESSAGE);
