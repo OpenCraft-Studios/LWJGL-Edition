@@ -129,7 +129,7 @@ java -cp OpenCraft.jar:libraries.jar: net.opencraft.OpenCraft --gameDir opcraft/
 
 ---
 
-**The full license is at [Mozilla Public License 2.0][license-url].**
+**The full license is at [BSL 1.0][license-url].**
 
 <br />
 
