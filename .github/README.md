@@ -54,7 +54,7 @@
 ### Why this project? 🤔
 > I created this project because Minecraft is closed-source. I know that you can decompile it, but modification
 > and redistribution of a modified copy of Minecraft is actually illegal. So I created a clone of Minecraft that
-> allows modification and redistribution with certain limitations.
+> allows modification and redistribution.
 
 I want to create a community around this project,
 I hope that you can be part of that community forking the repository or simply, bring us a star :heart:
