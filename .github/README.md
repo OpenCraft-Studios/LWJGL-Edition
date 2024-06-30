@@ -37,14 +37,14 @@
   </p>
 </div>
 
+<br />
+
 > [!WARNING]
 > This project **IS NOT** affiliated with Mojang or other minecraft product. <br />
 > This is just a hobby and I do not take care of any uses provided to this utility.
 
 > ```FOR SUPPORT:``` https://github.com/OpenCraft-Studios/LWJGL-Edition/issues/ <br />
 > ```FOR CONTRIBUTING:``` https://github.com/OpenCraft-Studios/LWJGL-Edition/pulls
-
----
 
 <br />
 
