@@ -2,6 +2,7 @@ package net.opencraft;
 
 import static javax.swing.JOptionPane.*;
 import static net.opencraft.SharedConstants.*;
+import static org.lwjgl.opengl.GL11.*;
 
 import java.io.File;
 
@@ -81,11 +82,13 @@ public final class OpenCraft implements Runnable {
 		this.init();
 		this.running = true;
 
-		GLGraphicsImpl g = GLGraphicsImpl.instance;
+		glClearColor(1F, 0, 0, 1F);
 		while (running) {
-			g.render();
-
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			
+			logo.autoBounds();
 			logo.render();
+			
 			tick();
 		}
 

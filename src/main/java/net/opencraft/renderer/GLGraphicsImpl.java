@@ -224,8 +224,7 @@ public class GLGraphicsImpl extends Graphics {
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, id);
 
-		glColor3f(1.0f, 1.0f, 1.0f);
-
+		glColor4f(1F, 1F, 1F, 1F);
 		glBegin(GL_QUADS);
 		{
 			glTexCoord2f(0, 0);
@@ -286,10 +285,6 @@ public class GLGraphicsImpl extends Graphics {
 
 	@Override
 	public void dispose() {
-	}
-
-	public void render() {
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
 }
