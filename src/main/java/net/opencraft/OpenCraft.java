@@ -3,7 +3,6 @@ package net.opencraft;
 import static javax.swing.JOptionPane.*;
 import static net.opencraft.SharedConstants.*;
 
-import java.awt.Color;
 import java.io.File;
 
 import org.lwjgl.LWJGLException;
@@ -25,7 +24,7 @@ public final class OpenCraft implements Runnable {
 
 	public boolean running = false;
 
-	private Thread thread;
+	public final Thread thread;
 	public final File directory;
 	private GuiLogo logo = new GuiLogo();
 
@@ -121,15 +120,6 @@ public final class OpenCraft implements Runnable {
 		// Same with mouse
 		if (!Mouse.isCreated())
 			throw new LWJGLException(String.format(INIT_ERROR_MESSAGE, "the mouse"));
-	}
-
-	/**
-	 * Returns the main thread where the game is allocated.
-	 * 
-	 * @return the main thread where the game is allocated.
-	 */
-	public Thread thread() {
-		return thread;
 	}
 
 	/**
