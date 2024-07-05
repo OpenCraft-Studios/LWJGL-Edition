@@ -1,27 +1,35 @@
 package net.opencraft.renderer;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.*;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.text.AttributedCharacterIterator;
 
-import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.*;
 
 /**
- * <h1>GLContext</h1> This class is used to implement Java Graphics to OpenGL.
- * OpenGL can be messy sometimes, so we decided to implement this class to code
- * much faster.
+ * <h1>GLGraphicsImpl</h1> This class is used to implement Java Graphics to
+ * OpenGL. OpenGL can be messy sometimes, so we decided to implement this class
+ * to code much faster.
  * 
  * @author Ciro
  * @since 1.0.0
  */
-public class GLContext extends Graphics {
+public class GLGraphicsImpl extends Graphics {
 
 	/**
 	 * The global instance of this class.
 	 */
-	public static final GLContext instance = new GLContext();
+	public static final GLGraphicsImpl instance = new GLGraphicsImpl();
+
+	private Font font;
+
+	public GLGraphicsImpl() {
+		this.font = new Font("Consolas", Font.PLAIN, 12);
+	}
 
 	@Override
 	public Graphics create() {
@@ -58,11 +66,12 @@ public class GLContext extends Graphics {
 
 	@Override
 	public Font getFont() {
-		return new Font("Consolas", Font.PLAIN, 12);
+		return font;
 	}
 
 	@Override
 	public void setFont(Font font) {
+		this.font = font;
 	}
 
 	@Override
@@ -78,14 +87,11 @@ public class GLContext extends Graphics {
 	@Override
 	public void setClip(int x, int y, int width, int height) {
 		glViewport(x, y, width, height);
-
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-
-		glOrtho(x, width, height, y, -1, 1);
-
+		
 		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
+        glLoadIdentity();
+        glOrtho(0, width, height, 0, -1, 1);
+        glMatrixMode(GL_MODELVIEW);
 	}
 
 	@Override
@@ -189,7 +195,7 @@ public class GLContext extends Graphics {
 
 	@Override
 	public void fillPolygon(int[] xPoints, int[] yPoints, int nPoints) {
-		
+
 	}
 
 	@Override
@@ -199,44 +205,83 @@ public class GLContext extends Graphics {
 
 	@Override
 	public void drawString(AttributedCharacterIterator iterator, int x, int y) {
-	}
+		String str = new String();
+		for (char c = iterator.first(); c != AttributedCharacterIterator.DONE; c = iterator.next()) {
+			str += c;
+		}
 
-	@Override
-	public boolean drawImage(Image img, int x, int y, ImageObserver observer) {
-		// TODO Auto-generated method stub
-		return false;
+		drawString(str, x, y);
 	}
 
 	@Override
 	public boolean drawImage(Image img, int x, int y, int width, int height, ImageObserver observer) {
-		// TODO Auto-generated method stub
-		return false;
+		int id = Textures.loadTexture(img, observer);
+
+		// Enable 2D texture
+		glEnable(GL_TEXTURE_2D);
+
+		// Bind the texture
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, id);
+
+		glColor3f(1.0f, 1.0f, 1.0f);
+
+		glBegin(GL_QUADS);
+		{
+			glTexCoord2f(0, 0);
+			glVertex2f(x, y);
+
+			glTexCoord2f(1, 0);
+			glVertex2f(x + width, y);
+
+			glTexCoord2f(1, 1);
+			glVertex2f(x + width, y + height);
+
+			glTexCoord2f(0, 1);
+			glVertex2f(x, y + height);
+		}
+		glEnd();
+
+		// Disable 2D texture
+		glDisable(GL_TEXTURE_2D);
+
+		return true;
+	}
+
+	@Override
+	public boolean drawImage(Image img, int x, int y, ImageObserver observer) {
+		return drawImage(img, x, y, img.getWidth(observer), img.getHeight(observer), observer);
+	}
+
+	@Override
+	public boolean drawImage(Image img0, int x, int y, int width, int height, Color bgcolor, ImageObserver observer) {
+		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g2d = img.createGraphics();
+		g2d.setColor(bgcolor);
+		g2d.fillRect(0, 0, img.getWidth(), img.getHeight());
+		g2d.drawImage(img0, 0, 0, null);
+		g2d.dispose();
+
+		return drawImage(img, 0, 0, width, height, observer);
 	}
 
 	@Override
 	public boolean drawImage(Image img, int x, int y, Color bgcolor, ImageObserver observer) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean drawImage(Image img, int x, int y, int width, int height, Color bgcolor, ImageObserver observer) {
-		// TODO Auto-generated method stub
-		return false;
+		return drawImage(img, x, y, img.getWidth(observer), img.getHeight(observer), bgcolor, observer);
 	}
 
 	@Override
 	public boolean drawImage(Image img, int dx1, int dy1, int dx2, int dy2, int sx1, int sy1, int sx2, int sy2,
 			ImageObserver observer) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean drawImage(Image img, int dx1, int dy1, int dx2, int dy2, int sx1, int sy1, int sx2, int sy2,
 			Color bgcolor, ImageObserver observer) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
