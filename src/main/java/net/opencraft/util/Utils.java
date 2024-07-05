@@ -2,9 +2,12 @@ package net.opencraft.util;
 
 import java.io.File;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.nio.file.*;
 import java.util.Enumeration;
+import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -29,13 +32,48 @@ public class Utils {
 
 		/**
 		 * Sets the style of the dialog boxes to system's default.
-		 * @return true if the look and feel was established successfully, otherwise false
+		 * 
+		 * @return true if the look and feel was established successfully, otherwise
+		 *         false
 		 */
 		public static boolean setOSLookAndFeel() {
 			try {
 				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			} catch (Exception ignored) {
 				System.err.println("Failed to set Look and feel!");
+				return false;
+			}
+
+			return true;
+		}
+
+		public static boolean alert(String title, String message) {
+			try {
+				Class<?> sysClass = Class.forName("org.lwjgl.Sys");
+				Field[] fields = sysClass.getDeclaredFields();
+
+				Object implementation = null;
+
+				for (Field field : fields) {
+					if (!field.getName().equals("implementation"))
+						continue;
+
+					field.setAccessible(true);
+					implementation = field.get(null);
+				}
+
+				Objects.requireNonNull(implementation, "LWJGL Implementation must not be null!");
+				Class<?> sysImplementationClass = Class.forName("org.lwjgl.SysImplementation");
+
+				Method[] methods = sysImplementationClass.getDeclaredMethods();
+				for (Method method : methods) {
+					if (!method.getName().equals("alert"))
+						continue;
+
+					method.setAccessible(true);
+					method.invoke(implementation, title, message);
+				}
+			} catch (Exception ignored) {
 				return false;
 			}
 
@@ -51,6 +89,7 @@ public class Utils {
 
 		/**
 		 * Downloads the natives into the selected directory.
+		 * 
 		 * @return true if everything goes successful, otherwise false
 		 */
 		public static boolean downloadNatives(File nativesDir) {
@@ -76,17 +115,17 @@ public class Utils {
 				nativesDir.mkdirs();
 
 			/* Create the LWJGL.zip file */
-			
+
 			// The file
 			File lwjglFile = new File(nativesDir, "lwjgl.zip");
 
 			// If a directory takes the name "lwjgl.zip", delete it
 			if (lwjglFile.isDirectory())
 				lwjglFile.delete();
-			
+
 			// Create the URI of the file
 			URI uri = URI.create(LWJGL_ZIP);
-			
+
 			// Download the file
 			try (InputStream in = uri.toURL().openStream()) {
 				Files.copy(in, lwjglFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -173,22 +212,22 @@ public class Utils {
 	public static File requestDirectory() {
 		boolean invalidDir = true;
 		File directory;
-		
+
 		do {
 			String strDirectory;
 			strDirectory = (String) JOptionPane.showInputDialog(null, "Insert the directory of the game:", "opcraft");
-			
+
 			// If the user has pressed the cancel button, exit JVM
 			if (strDirectory == null)
 				System.exit(0);
-			
+
 			// Try to parse directory
 			directory = parseDirectory(strDirectory);
 			if (invalidDir = directory == null)
 				JOptionPane.showMessageDialog(null, "Invalid directory! Try again.", "", JOptionPane.ERROR_MESSAGE);
-			
+
 		} while (invalidDir);
-		
+
 		return directory;
 	}
 
@@ -200,12 +239,12 @@ public class Utils {
 		} catch (Exception ignored) {
 			return null;
 		}
-		
+
 		if (dir.isFile())
 			dir.delete();
 		if (!dir.exists())
 			dir.mkdirs();
-		
+
 		return dir;
 	}
 

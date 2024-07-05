@@ -12,8 +12,8 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
-import joptsimple.*;
-import net.opencraft.renderer.GLContext;
+import net.opencraft.renderer.GLGraphicsImpl;
+import net.opencraft.renderer.gui.GuiLogo;
 import net.opencraft.util.Utils;
 
 public final class OpenCraft implements Runnable {
@@ -27,6 +27,7 @@ public final class OpenCraft implements Runnable {
 
 	private Thread thread;
 	public final File directory;
+	private GuiLogo logo = new GuiLogo();
 
 	/**
 	 * Creates an OpenCraft instance with the specified parameters.
@@ -36,7 +37,7 @@ public final class OpenCraft implements Runnable {
 	 */
 	public OpenCraft(File directory, int width, int height) {
 		if (directory == null) {
-			showMessageDialog(null, "Invalid directory!", "Failed to instance OpenCraft!", ERROR_MESSAGE);
+			showMessageDialog(null, INVALID_DIR_MESSAGE, "Failed to instance OpenCraft!", ERROR_MESSAGE);
 			System.exit(INVALID_DIR_CODE);
 		}
 
@@ -66,9 +67,11 @@ public final class OpenCraft implements Runnable {
 
 	private void tick() {
 		this.running = running && !Display.isCloseRequested();
-		if (Display.isResizable()) {
+
+		if (Display.wasResized()) {
 			this.width = Display.getWidth();
 			this.height = Display.getHeight();
+			GLGraphicsImpl.instance.setClip(0, 0, width, height);
 		}
 
 		Display.update();
@@ -79,14 +82,11 @@ public final class OpenCraft implements Runnable {
 		this.init();
 		this.running = true;
 
-		GLContext gl = GLContext.instance;
+		GLGraphicsImpl g = GLGraphicsImpl.instance;
 		while (running) {
-			gl.render();
-			gl.setClip(0, 0, width, height);
+			g.render();
 
-			gl.setColor(Color.WHITE);
-			gl.drawLine(0, 0, 854, 480);
-
+			logo.render();
 			tick();
 		}
 
@@ -95,19 +95,20 @@ public final class OpenCraft implements Runnable {
 
 	/**
 	 * Initializes OpenGL and Inputs.
-	 * @throws LWJGLException if something failed to start
+	 * 
+	 * @throws LWJGLException       if something failed to start
 	 * @throws UnsatisfiedLinkError if natives weren't linked
-	 * @throws Exception if something else failed
+	 * @throws Exception            if something else failed
 	 */
 	private void initGL() throws LWJGLException, UnsatisfiedLinkError, Exception {
 		// Check if full screen is activated
-		if (Utils.isFullscreen(width, height))
-			Display.setFullscreen(true);
+		Display.setFullscreen(Utils.isFullscreen(width, height));
 
 		/* Display */
-		Display.setDisplayMode(new DisplayMode(this.width, this.height)); // Sets the width and height of the display
-		Display.setTitle("OpenCraft ".concat(VERSION_STRING));            // Sets the window title
-		Display.create();                                                 // Creates the window
+		Display.setDisplayMode(new DisplayMode(854, 480));     // Sets the width and height of the display
+		Display.setTitle("OpenCraft ".concat(VERSION_STRING)); // Sets the window title
+		Display.setResizable(true);                            // Set resizable
+		Display.create();                                      // Creates the window
 
 		/* Inputs */
 		Keyboard.create(); // Create Keyboard
@@ -121,17 +122,26 @@ public final class OpenCraft implements Runnable {
 		if (!Mouse.isCreated())
 			throw new LWJGLException(String.format(INIT_ERROR_MESSAGE, "the mouse"));
 	}
-	
+
 	/**
-	 * Tries to stop the game saving all resources
-	 * and stopping the current thread.
+	 * Returns the main thread where the game is allocated.
+	 * 
+	 * @return the main thread where the game is allocated.
+	 */
+	public Thread thread() {
+		return thread;
+	}
+
+	/**
+	 * Tries to stop the game saving all resources and stopping the current thread.
 	 * 
 	 * How this method works:
 	 * <ul>
-	 *   <li>Sets running variable to false</li>
-	 *   <li>Destroys inputs and display</li>
-	 *   <li>Stops the thread with {@link Thread#stop()} or with {@link Thread#interrupt()}</li>
-	 *   <li>Exits the JVM</li>
+	 * <li>Sets running variable to false</li>
+	 * <li>Destroys inputs and display</li>
+	 * <li>Stops the thread with {@link Thread#stop()} or with
+	 * {@link Thread#interrupt()}</li>
+	 * <li>Exits the JVM</li>
 	 * </ul>
 	 */
 	@SuppressWarnings("deprecation")
@@ -160,10 +170,9 @@ public final class OpenCraft implements Runnable {
 				e2.printStackTrace();
 			}
 		}
-		
+
 		/*
-		 * If the thread didn't stop and failed,
-		 * exit the JVM
+		 * If the thread didn't stop and failed, exit the JVM
 		 */
 		System.exit(FORCE_THREAD_EXIT_CODE);
 	}
@@ -174,8 +183,7 @@ public final class OpenCraft implements Runnable {
 			this.initGL();
 		} catch (LWJGLException e) {
 			/*
-			 * This exception is thrown when a OpenGL component
-			 * fails to initialize.
+			 * This exception is thrown when a OpenGL component fails to initialize.
 			 */
 			e.printStackTrace(); // Show stack trace on console
 			showMessageDialog(null, e, "Failed to start OpenCraft!", ERROR_MESSAGE);
@@ -184,18 +192,18 @@ public final class OpenCraft implements Runnable {
 				System.exit(INIT_ERROR_CODE);
 
 			System.exit(GENERIC_ERROR_CODE);
-			
+
 		} catch (UnsatisfiedLinkError ule) {
 			/*
 			 * This error occurs when OpenCraft has got no linked natives (DLL files).
 			 */
-			
+
 			// Show a error message
 			showMessageDialog(null, "OpenCraft requires OpenGL natives!", "Failed to start OpenCraft!", ERROR_MESSAGE);
-			
+
 			// Exit the JVM with the error code specified
 			System.exit(NO_NATIVES_LINKED_CODE);
-			
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			showMessageDialog(null, ex, "Failed to start OpenCraft!", ERROR_MESSAGE);
@@ -204,62 +212,6 @@ public final class OpenCraft implements Runnable {
 		}
 
 		this.running = true;
-	}
-
-	public static void main(String[] args) {
-		OptionParser parser = new OptionParser();
-
-		Utils.GUI.setOSLookAndFeel();
-		checkNatives();
-
-		OptionSpec<?> gameDirArgument = parser.accepts("gameDir").withRequiredArg();
-		File gameDir = null;
-
-		OptionSet optionSet = parser.parse(args);
-		if (optionSet.has(gameDirArgument))
-			gameDir = Utils.parseDirectory(optionSet.valueOf(gameDirArgument));
-		else
-			gameDir = Utils.requestDirectory();
-
-		// Call main thread "BootstrapThread"
-		Thread.currentThread().setName("BootstrapThread");
-
-		// Create an OpenCraft instance
-		OpenCraft.oc = new OpenCraft(gameDir, 854, 480);
-
-		// The thread the game is allocated on
-		System.out.println("Allocating game on: " + oc.thread.getName());
-
-		// Start the game
-		oc.thread.start();
-
-		// Wait until the game finishes
-		try {
-			oc.thread.join();
-		} catch (Exception ignored) {
-		}
-
-		// Exit
-		System.exit(0);
-	}
-
-	private static void checkNatives() {
-		if (!Utils.Natives.nativesLinked()) {
-			final int option = showConfirmDialog(null,
-					"The game detected there are no natives linked.\nDownload natives?", "No natives linked",
-					YES_NO_OPTION, QUESTION_MESSAGE);
-			if (option == YES_OPTION) {
-				File nativesDir = new File(".");
-
-				System.out.println("No natives linked: Downloading...");
-				boolean successful = Utils.Natives.downloadNatives(nativesDir);
-				showMessageDialog(null, "The game has finished downloading the natives!");
-				if (!successful)
-					System.err.println("Failed to download natives!");
-
-			} else
-				System.out.println("No natives linked: Ignored");
-		}
 	}
 
 }
