@@ -8,19 +8,18 @@
 	<name>OpenCraft</name>
 
 	<dependencies>
-
 		<!-- https://mvnrepository.com/artifact/org.lwjgl.lwjgl/lwjgl_util -->
 		<dependency>
 			<groupId>org.lwjgl.lwjgl</groupId>
 			<artifactId>lwjgl_util</artifactId>
-			<version>2.9.1</version>
+			<version>2.9.3</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.lwjgl.lwjgl/lwjgl -->
 		<dependency>
 			<groupId>org.lwjgl.lwjgl</groupId>
 			<artifactId>lwjgl</artifactId>
-			<version>2.9.1</version>
+			<version>2.9.3</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/net.java.jinput/jinput -->
@@ -76,6 +75,13 @@
 			<groupId>net.sf.jopt-simple</groupId>
 			<artifactId>jopt-simple</artifactId>
 			<version>5.0.4</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.11.0</version>
 		</dependency>
 
 	</dependencies>
