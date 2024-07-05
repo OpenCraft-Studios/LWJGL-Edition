@@ -71,6 +71,7 @@ public class Textures {
 			img.setRGB(1, 0, Color.BLACK.getRGB());
 			img.setRGB(1, 1, Color.MAGENTA.getRGB());
 		}
+		
 		return img;
 	}
 }
