@@ -20,14 +20,14 @@ public class Launcher {
 		Thread.currentThread().setName("LauncherBootstrapThread");
 
 		OpenCraft.oc = new OpenCraft(gameDir, 854, 480);
-		System.out.println("Allocating game on: " + oc.thread().getName());
+		System.out.println("Allocating game on: " + oc.thread.getName());
 
 		// Start the game
-		oc.thread().start();
+		oc.thread.start();
 
 		// Wait until the game finishes
 		try {
-			oc.thread().join();
+			oc.thread.join();
 		} catch (Exception ignored) {
 		}
 
