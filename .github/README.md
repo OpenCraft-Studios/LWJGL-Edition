@@ -37,14 +37,14 @@
   </p>
 </div>
 
+<br />
+
 > [!WARNING]
 > This project **IS NOT** affiliated with Mojang or other minecraft product. <br />
 > This is just a hobby and I do not take care of any uses provided to this utility.
 
 > ```FOR SUPPORT:``` https://github.com/OpenCraft-Studios/LWJGL-Edition/issues/ <br />
 > ```FOR CONTRIBUTING:``` https://github.com/OpenCraft-Studios/LWJGL-Edition/pulls
-
----
 
 <br />
 
@@ -54,7 +54,7 @@
 ### Why this project? 🤔
 > I created this project because Minecraft is closed-source. I know that you can decompile it, but modification
 > and redistribution of a modified copy of Minecraft is actually illegal. So I created a clone of Minecraft that
-> allows modification and redistribution with certain limitations.
+> allows modification and redistribution.
 
 I want to create a community around this project,
 I hope that you can be part of that community forking the repository or simply, bring us a star :heart:
@@ -129,7 +129,7 @@ java -cp OpenCraft.jar:libraries.jar: net.opencraft.OpenCraft --gameDir opcraft/
 
 ---
 
-**The full license is at [Mozilla Public License 2.0][license-url].**
+**The full license is at [BSL 1.0][license-url].**
 
 <br />
 
