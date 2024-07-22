@@ -115,6 +115,10 @@ public final class OpenCraft implements Runnable {
 		/* Inputs */
 		Keyboard.create(); // Create Keyboard
 		Mouse.create();    // Create mouse
+		
+		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_BLEND);
+	    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		// If keyboard is not created, throw an exception
 		if (!Keyboard.isCreated())

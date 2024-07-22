@@ -30,6 +30,9 @@ public class Textures {
 	public static int loadTexture(final Image img, final ImageObserver observer) {
 		Objects.requireNonNull(img, "specified image must not be null!");
 		
+		if (img instanceof BufferedImage)
+			return loadTexture((BufferedImage) img);
+		
 		BufferedImage bi = new BufferedImage(img.getWidth(observer), img.getHeight(observer),
 				BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
