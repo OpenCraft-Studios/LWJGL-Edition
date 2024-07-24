@@ -19,62 +19,64 @@ import net.opencraft.util.ImageDecoder;
  * javax.imageio.ImageIO for image loading. It supports loading textures from
  * PNG files.
  */
-public class Textures {
+public final class Textures {
 
-	private static Map<Image, Integer> idMap = new HashMap<>();
+    private static Map<Image, Integer> idMap = new HashMap<>();
 
-	public static int loadTexture(String resourceName) {
-		return loadTexture(read(resourceName));
-	}
+    public static int loadTexture(String resourceName) {
+        return loadTexture(read(resourceName));
+    }
 
-	public static int loadTexture(final Image img, final ImageObserver observer) {
-		Objects.requireNonNull(img, "specified image must not be null!");
-		
-		if (img instanceof BufferedImage)
-			return loadTexture((BufferedImage) img);
-		
-		BufferedImage bi = new BufferedImage(img.getWidth(observer), img.getHeight(observer),
-				BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = bi.createGraphics();
-		g2d.drawImage(img, 0, 0, observer);
-		g2d.dispose();
+    public static int loadTexture(final Image img, final ImageObserver observer) {
+        Objects.requireNonNull(img, "specified image must not be null!");
 
-		return loadTexture(bi);
-	}
+        if (img instanceof BufferedImage) {
+            return loadTexture((BufferedImage) img);
+        }
 
-	public static int loadTexture(BufferedImage image) {
-		Objects.requireNonNull(image, "specified image must not be null!");
-		if (idMap.containsKey(image))
-			return idMap.get(image).intValue();
+        BufferedImage bi = new BufferedImage(img.getWidth(observer), img.getHeight(observer),
+                BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = bi.createGraphics();
+        g2d.drawImage(img, 0, 0, observer);
+        g2d.dispose();
 
-		final int width = image.getWidth();
-		final int height = image.getHeight();
+        return loadTexture(bi);
+    }
 
-		ByteBuffer pixels = ImageDecoder.decode(image);
+    public static int loadTexture(BufferedImage image) {
+        Objects.requireNonNull(image, "specified image must not be null!");
+        if (idMap.containsKey(image)) {
+            return idMap.get(image);
+        }
 
-		final int textureID = glGenTextures();
-		idMap.put(image, textureID);
+        final int width = image.getWidth();
+        final int height = image.getHeight();
 
-		glBindTexture(GL_TEXTURE_2D, textureID);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        ByteBuffer pixels = ImageDecoder.decode(image);
 
-		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-		return textureID;
-	}
+        final int textureID = glGenTextures();
+        idMap.put(image, textureID);
 
-	public static BufferedImage read(String resourceName) {
-		BufferedImage img = null;
-		try {
-			img = ImageIO.read(Textures.class.getResourceAsStream(resourceName));
-		} catch (Exception ignored) {
-			img = new BufferedImage(2, 2, BufferedImage.TYPE_INT_RGB);
-			img.setRGB(0, 0, Color.MAGENTA.getRGB());
-			img.setRGB(0, 1, Color.BLACK.getRGB());
-			img.setRGB(1, 0, Color.BLACK.getRGB());
-			img.setRGB(1, 1, Color.MAGENTA.getRGB());
-		}
-		
-		return img;
-	}
+        glBindTexture(GL_TEXTURE_2D, textureID);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+        return textureID;
+    }
+
+    public static BufferedImage read(String resourceName) {
+        BufferedImage img = null;
+        try {
+            img = ImageIO.read(Textures.class.getResourceAsStream(resourceName));
+        } catch (Exception ignored) {
+            img = new BufferedImage(2, 2, BufferedImage.TYPE_INT_RGB);
+            img.setRGB(0, 0, Color.MAGENTA.getRGB());
+            img.setRGB(0, 1, Color.BLACK.getRGB());
+            img.setRGB(1, 0, Color.BLACK.getRGB());
+            img.setRGB(1, 1, Color.MAGENTA.getRGB());
+        }
+
+        return img;
+    }
 }
