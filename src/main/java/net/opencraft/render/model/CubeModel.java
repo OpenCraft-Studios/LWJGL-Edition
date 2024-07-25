@@ -34,6 +34,7 @@ public class CubeModel extends Model {
         this.visible = visible;
     }
 
+    @Override
     public void load() {
         CubeLoader.load(this);
     }

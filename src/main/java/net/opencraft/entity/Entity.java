@@ -7,6 +7,9 @@ import org.joml.Vector3f;
 
 public abstract class Entity {
 
+    public static final float SPEED = 4.317f;
+    public static final float RUNNING_SPEED = 5.612f;
+    
     public float x;
     public float y;
     public float z;
@@ -14,6 +17,9 @@ public abstract class Entity {
     public float xd;
     public float yd;
     public float zd;
+    
+    public float yaw;
+    public float pitch;
 
     protected boolean removed;
     protected UUID uuid;

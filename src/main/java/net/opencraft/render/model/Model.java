@@ -4,12 +4,10 @@ import org.joml.Vector3f;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
 public class Model {
-
+    
     public int vaoId;
     public int vboId;
     public int eboId;
-    
-    private CubeLoader loader;
     
     public float[] vertices;
     public int[] indices;
@@ -19,11 +17,9 @@ public class Model {
         this.indices = indices;
     }
     
-    public void setLoader(CubeLoader l) {
-        this.loader = l;
-    }
-    
     public void load() {}
+    
+    public void unload() {}
     
     public void render() {}
     

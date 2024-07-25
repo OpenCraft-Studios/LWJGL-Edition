@@ -1,6 +1,7 @@
 package net.opencraft.util;
 
 import net.opencraft.OpenCraft;
+import net.opencraft.entity.Entity;
 import static org.joml.Math.cos;
 import static org.joml.Math.sin;
 import static org.joml.Math.toRadians;
@@ -10,8 +11,7 @@ import org.lwjgl.input.Mouse;
 public class InputManager {
 
     public static final float SENSIVILITY = 5;
-    public static final float SPEED = 4.317f;
-
+    
     private final OpenCraft oc;
 
     public InputManager(OpenCraft oc) {
@@ -40,7 +40,7 @@ public class InputManager {
         if (!Mouse.isGrabbed()) {
             return;
         }
-
+        
         int deltaX = Mouse.getDX();
         int deltaY = Mouse.getDY();
 
@@ -63,23 +63,27 @@ public class InputManager {
         if (!Mouse.isGrabbed()) {
             return;
         }
+        
+        boolean isCtrlPressed = Keyboard.isKeyDown(Keyboard.KEY_LCONTROL);
+        float speed = isCtrlPressed ? Entity.RUNNING_SPEED : Entity.SPEED;
+        speed *= (float) deltaTime;
 
         // Backwards and forwards
         if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-            oc.camera.x += deltaTime * SPEED * sin(toRadians(oc.camera.yaw));
-            oc.camera.z -= deltaTime * SPEED * cos(toRadians(oc.camera.yaw));
+            oc.camera.x += speed * sin(toRadians(oc.camera.yaw));
+            oc.camera.z -= speed * cos(toRadians(oc.camera.yaw));
         } else if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
-            oc.camera.x -= deltaTime * SPEED * sin(toRadians(oc.camera.yaw));
-            oc.camera.z += deltaTime * SPEED * cos(toRadians(oc.camera.yaw));
+            oc.camera.x -= speed * sin(toRadians(oc.camera.yaw));
+            oc.camera.z += speed * cos(toRadians(oc.camera.yaw));
         }
 
         // Left and right
-        if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-            oc.camera.x -= deltaTime * SPEED * sin(toRadians(oc.camera.yaw + 90));
-            oc.camera.z += deltaTime * SPEED * cos(toRadians(oc.camera.yaw + 90));
-        } else if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-            oc.camera.x += deltaTime * SPEED * sin(toRadians(oc.camera.yaw + 90));
-            oc.camera.z -= deltaTime * SPEED * cos(toRadians(oc.camera.yaw + 90));
+        if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
+            oc.camera.x += speed * sin(toRadians(oc.camera.yaw + 90));
+            oc.camera.z -= speed * cos(toRadians(oc.camera.yaw + 90));
+        } else if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
+            oc.camera.x -= speed * sin(toRadians(oc.camera.yaw + 90));
+            oc.camera.z += speed * cos(toRadians(oc.camera.yaw + 90));
         }
     }
 

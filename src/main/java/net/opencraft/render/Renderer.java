@@ -12,10 +12,13 @@ public class Renderer {
     private FloatBuffer fogColor0 = BufferUtils.createFloatBuffer(4);
     private FloatBuffer fogColor1 = BufferUtils.createFloatBuffer(4);
 
+    private final int monitorRefreshRate;
+    
     public Camera camera;
     public float fov;
 
     public Renderer() {
+        monitorRefreshRate = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getRefreshRate();
     }
 
     public void enableTexturization() {
@@ -75,14 +78,15 @@ public class Renderer {
 
         return camera;
     }
-
-    public int getMonitorRefreshRate() {
-        return GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getRefreshRate();
-    }
     
     public void setFOV(float fov) {
         this.fov = fov;
         updateProjection();
+    }
+
+    public void vsync() {
+        Display.update();
+        Display.sync(monitorRefreshRate);
     }
 
 }

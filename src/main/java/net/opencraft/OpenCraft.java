@@ -22,6 +22,7 @@ import org.lwjgl.opengl.DisplayMode;
 import net.opencraft.util.Utils;
 import net.opencraft.render.Renderer;
 import net.opencraft.util.InputManager;
+import net.opencraft.util.ZoomHelper;
 
 public final class OpenCraft implements Runnable {
 
@@ -29,9 +30,6 @@ public final class OpenCraft implements Runnable {
 
     public int width;
     public int height;
-    
-    private boolean didZoom = false;
-    private int monitorRefreshRate = 60;
     
     public boolean running = false;
 
@@ -62,7 +60,6 @@ public final class OpenCraft implements Runnable {
 
         // Create a new renderer
         this.renderer = new Renderer();
-        this.monitorRefreshRate = renderer.getMonitorRefreshRate();
         this.camera = renderer.createCamera();
         this.camera.y = 2;
 
@@ -111,8 +108,7 @@ public final class OpenCraft implements Runnable {
     
     private void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
-        checkZoom();
+        ZoomHelper.update();
         
         CubeModel cube = new CubeModel(true);
         cube.load();
@@ -132,31 +128,12 @@ public final class OpenCraft implements Runnable {
             {
                 tick();
                 render();
-                Display.update();
-                vsync();
+                renderer.vsync();
             }
             this.deltaTime = Duration.between(beginTime, Instant.now()).toMillis() / 1000.0d;
         }
 
         this.stop();
-    }
-    
-    private void vsync() {
-        Display.sync(monitorRefreshRate);
-    }
-    
-    private void checkZoom() {
-        if (Keyboard.isKeyDown(Keyboard.KEY_C)) {
-            if (!didZoom) {
-                renderer.setFOV(45f);
-                didZoom = true;
-            }
-        } else {
-            if (didZoom) {
-                renderer.setFOV(70f);
-                didZoom = false;
-            }
-        }
     }
 
     /**
