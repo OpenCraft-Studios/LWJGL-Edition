@@ -22,7 +22,6 @@ import javax.swing.UIManager;
 
 import org.lwjgl.opengl.Display;
 
-import net.opencraft.annotation.Required;
 import org.lwjgl.BufferUtils;
 
 public class Utils {
@@ -143,8 +142,7 @@ public class Utils {
             }
         }
 
-        private static void downloadNatives1(@Required File nativesDir) throws Exception {
-            @Required
+        private static void downloadNatives1(File nativesDir) throws Exception {
             File lwjglFile = new File(nativesDir, "lwjgl.zip");
 
             // If the 'lwjgl.zip' file doesn't exists, throw an exception

@@ -1,4 +1,4 @@
-package net.opencraft.renderer.model;
+package net.opencraft.render.model;
 
 import org.joml.Vector3f;
 import static org.lwjgl.opengl.GL11.glTranslatef;
@@ -9,7 +9,7 @@ public class Model {
     public int vboId;
     public int eboId;
     
-    private ModelLoader loader;
+    private CubeLoader loader;
     
     public float[] vertices;
     public int[] indices;
@@ -19,13 +19,11 @@ public class Model {
         this.indices = indices;
     }
     
-    public void setLoader(ModelLoader l) {
+    public void setLoader(CubeLoader l) {
         this.loader = l;
     }
     
-    public void load() {
-        ModelLoader.load(this);
-    }
+    public void load() {}
     
     public void render() {}
     

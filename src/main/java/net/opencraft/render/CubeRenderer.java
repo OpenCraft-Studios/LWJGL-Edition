@@ -1,6 +1,6 @@
-package net.opencraft.renderer;
+package net.opencraft.render;
 
-import net.opencraft.renderer.model.CubeModel;
+import net.opencraft.render.model.CubeModel;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;

@@ -10,8 +10,8 @@ import static org.lwjgl.opengl.GL11.*;
 import java.io.File;
 import java.time.Duration;
 import java.time.Instant;
-import net.opencraft.renderer.model.CubeModel;
-import net.opencraft.renderer.Camera;
+import net.opencraft.render.model.CubeModel;
+import net.opencraft.render.Camera;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
@@ -20,7 +20,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
 import net.opencraft.util.Utils;
-import net.opencraft.renderer.Renderer;
+import net.opencraft.render.Renderer;
 import net.opencraft.util.InputManager;
 
 public final class OpenCraft implements Runnable {
@@ -64,6 +64,7 @@ public final class OpenCraft implements Runnable {
         this.renderer = new Renderer();
         this.monitorRefreshRate = renderer.getMonitorRefreshRate();
         this.camera = renderer.createCamera();
+        this.camera.y = 2;
 
         // Create a input controller
         im = new InputManager(this);
@@ -99,6 +100,8 @@ public final class OpenCraft implements Runnable {
         if (Display.wasResized()) {
             this.width = Display.getWidth();
             this.height = Display.getHeight();
+            
+            renderer.updateProjection();
         }
         
         im.handleInput();
@@ -145,12 +148,12 @@ public final class OpenCraft implements Runnable {
     private void checkZoom() {
         if (Keyboard.isKeyDown(Keyboard.KEY_C)) {
             if (!didZoom) {
-                renderer.updateProjection(45f);
+                renderer.setFOV(45f);
                 didZoom = true;
             }
         } else {
             if (didZoom) {
-                renderer.updateProjection(70f);
+                renderer.setFOV(70f);
                 didZoom = false;
             }
         }
@@ -184,7 +187,7 @@ public final class OpenCraft implements Runnable {
         // Enable 3d and optimization tricks
         renderer.enable3D();
         renderer.enableFaceCulling();
-        renderer.updateProjection(70F);
+        renderer.setFOV(70F);
 
         // Enable alpha
         renderer.enableAlpha();

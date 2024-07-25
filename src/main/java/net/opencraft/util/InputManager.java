@@ -9,7 +9,7 @@ import org.lwjgl.input.Mouse;
 
 public class InputManager {
 
-    public static final float SENSIVILITY = 1;
+    public static final float SENSIVILITY = 5;
     public static final float SPEED = 4.317f;
 
     private final OpenCraft oc;
@@ -80,13 +80,6 @@ public class InputManager {
         } else if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
             oc.camera.x += deltaTime * SPEED * sin(toRadians(oc.camera.yaw + 90));
             oc.camera.z -= deltaTime * SPEED * cos(toRadians(oc.camera.yaw + 90));
-        }
-
-        // Up and down
-        if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-            oc.camera.y += deltaTime * SPEED;
-        } else if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-            oc.camera.y -= deltaTime * SPEED;
         }
     }
 

@@ -1,6 +1,6 @@
-package net.opencraft.renderer.model;
+package net.opencraft.render.model;
 
-import net.opencraft.renderer.CubeRenderer;
+import net.opencraft.render.CubeRenderer;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL30.*;
 
@@ -34,6 +34,10 @@ public class CubeModel extends Model {
         this.visible = visible;
     }
 
+    public void load() {
+        CubeLoader.load(this);
+    }
+    
     @Override
     public void render() {
         if (!visible)

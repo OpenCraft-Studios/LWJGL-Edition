@@ -1,5 +1,6 @@
-package net.opencraft.renderer;
+package net.opencraft.render;
 
+import net.opencraft.render.texture.TextureLoader;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
 
@@ -7,6 +8,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.text.AttributedCharacterIterator;
+import net.opencraft.render.texture.Texture;
 
 import org.lwjgl.opengl.*;
 
@@ -215,14 +217,13 @@ public class GLGraphicsImpl extends Graphics {
 
     @Override
     public boolean drawImage(Image img, int x, int y, int width, int height, ImageObserver observer) {
-        int id = Textures.loadTexture(img, observer);
-
-        // Enable 2D texture
-        glEnable(GL_TEXTURE_2D);
-
-        // Bind the texture
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, id);
+        BufferedImage bi = new BufferedImage(img.getWidth(observer), img.getHeight(observer), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = bi.createGraphics();
+        g2d.drawImage(img, 0, 0, observer);
+        g2d.dispose();
+        
+        Texture tex = TextureLoader.getTexture(bi);
+        tex.load().bind();
 
         glColor4f(1F, 1F, 1F, 1F);
         glBegin(GL_QUADS);
@@ -240,9 +241,6 @@ public class GLGraphicsImpl extends Graphics {
             glVertex2f(x, y + height);
         }
         glEnd();
-
-        // Disable 2D texture
-        glDisable(GL_TEXTURE_2D);
 
         return true;
     }

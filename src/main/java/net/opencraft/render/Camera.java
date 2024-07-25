@@ -1,4 +1,4 @@
-package net.opencraft.renderer;
+package net.opencraft.render;
 
 import static org.lwjgl.opengl.GL11.glLoadIdentity;
 import static org.lwjgl.opengl.GL11.glRotatef;

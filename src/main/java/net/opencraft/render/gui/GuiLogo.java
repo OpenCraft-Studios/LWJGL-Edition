@@ -1,12 +1,12 @@
-package net.opencraft.renderer.gui;
+package net.opencraft.render.gui;
 
 import static net.opencraft.OpenCraft.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-import net.opencraft.renderer.GLGraphicsImpl;
-import net.opencraft.renderer.Textures;
+import net.opencraft.render.GLGraphicsImpl;
+import net.opencraft.render.texture.TextureLoader;
 
 public final class GuiLogo {
 
@@ -19,7 +19,7 @@ public final class GuiLogo {
     private int height = 0;
 
     public GuiLogo() {
-        this.texture = Textures.read("/logo.png");
+        this.texture = TextureLoader.getTexture("PNG", "/logo.png").toJavaImage();
         autosize();
     }
 

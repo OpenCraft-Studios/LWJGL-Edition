@@ -1,4 +1,4 @@
-package net.opencraft.renderer.model;
+package net.opencraft.render.model;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -8,9 +8,9 @@ import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
-public final class ModelLoader {
+public final class CubeLoader {
     
-    private ModelLoader() {
+    private CubeLoader() {
     }
     
     private static int createVAO() {

@@ -1,4 +1,4 @@
-package net.opencraft.renderer;
+package net.opencraft.render;
 
 import java.awt.GraphicsEnvironment;
 import java.nio.FloatBuffer;
@@ -13,6 +13,7 @@ public class Renderer {
     private FloatBuffer fogColor1 = BufferUtils.createFloatBuffer(4);
 
     public Camera camera;
+    public float fov;
 
     public Renderer() {
     }
@@ -39,7 +40,9 @@ public class Renderer {
         glAlphaFunc(GL_GREATER, 0);
     }
 
-    public void updateProjection(float fov) {
+    public void updateProjection() {
+        glViewport(0, 0, Display.getWidth(), Display.getHeight());
+        
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         setupPerspective(fov);
@@ -75,6 +78,11 @@ public class Renderer {
 
     public int getMonitorRefreshRate() {
         return GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getRefreshRate();
+    }
+    
+    public void setFOV(float fov) {
+        this.fov = fov;
+        updateProjection();
     }
 
 }
