@@ -135,9 +135,9 @@ java -cp OpenCraft.jar:libraries.jar: net.opencraft.OpenCraft --gameDir opcraft/
 
 
 # 👷‍♂️ Developers
-| [![CiroZDP](https://avatars.githubusercontent.com/u/161502824?v=4)](https://github.com/CiroZDP) | [![milk man](https://avatars.githubusercontent.com/u/74984053?v=4)](https://github.com/TheNicolasDeveloper) | ![Community](https://cdni.iconscout.com/illustration/free/thumb/free-community-2103591-1768087.png)	|
-| :---------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------: |
-|                                         **CiroZDP**                                             |                                          **TheNicolasDeveloper**                                            |                                          **The community**                                          |
+| [![CiroZDP](https://avatars.githubusercontent.com/u/161502824?v=4)](https://github.com/CiroZDP) | ![Community](https://cdni.iconscout.com/illustration/free/thumb/free-community-2103591-1768087.png)	|
+| :---------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------: |
+|                                         **CiroZDP**                                             |                                          **The community**                                          |
 
 ---
 
